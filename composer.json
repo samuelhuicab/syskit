@@ -1,0 +1,24 @@
+{
+  "name": "samuelhuicab/syskit",
+  "description": "Toolkit PHP profesional para tareas del sistema, automatización, optimización y monitoreo.",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "SysKit\\": "src/"
+    }
+  },
+  "require": {
+    "php": ">=8.1",
+    "ext-zip": "*",
+    "ext-gd": "*"
+  },
+  "authors": [
+    {
+      "name": "Samuel Huicab Pastrana",
+      "email": "samueleliashuicab@gmail.com"
+    }
+  ],
+  "keywords": ["php", "automation", "backup", "logs", "cron", "system", "images"],
+  "homepage": "https://github.com/samuelhuicab/syskit"
+}

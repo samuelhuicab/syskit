@@ -59,7 +59,7 @@ class SysKit
     }
 
     /** Devuelve el tamaño legible de una carpeta o archivo. */
-    public static function dirSize(string $path, bool $humanReadable = true): string|int
+    public static function dirSize(string $path, bool $humanReadable = true)
     {
         $size = FileHelper::dirSize($path);
         return $humanReadable ? FileHelper::humanSize($size) : $size;
@@ -113,7 +113,7 @@ class SysKit
     }
 
     /** Devuelve métricas en formato JSON: CPU, RAM, disco, uptime, etc. */
-    public static function monitor(bool $asJson = true): string|array
+    public static function monitor(bool $asJson = true)
     {
         $data = SystemHelper::getMetrics();
         return $asJson ? json_encode($data, JSON_PRETTY_PRINT) : $data;

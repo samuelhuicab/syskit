@@ -32,12 +32,22 @@ class TaskHelper
     {
         [$value, $unit] = explode(' ', trim($interval), 2);
         $value = (int)$value;
-        return match(strtolower($unit)) {
-            'second', 'seconds' => $value,
-            'minute', 'minutes' => $value * 60,
-            'hour', 'hours'     => $value * 3600,
-            'day', 'days'       => $value * 86400,
-            default => throw new \Exception("Intervalo inválido: $interval")
-        };
+
+        switch (strtolower($unit)) {
+            case 'second':
+            case 'seconds':
+                return $value;
+            case 'minute':
+            case 'minutes':
+                return $value * 60;
+            case 'hour':
+            case 'hours':
+                return $value * 3600;
+            case 'day':
+            case 'days':
+                return $value * 86400;
+            default:
+                throw new \Exception("Intervalo inválido: $interval");
+        }
     }
 }

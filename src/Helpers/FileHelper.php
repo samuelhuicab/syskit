@@ -5,6 +5,17 @@ use ZipArchive;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
+/**
+ * SysKit FileHelper v2.1
+ *
+ * Librería utilitaria para la gestión avanzada de archivos y directorios:
+ * - Compresión y descompresión ZIP.
+ * - Copia, movimiento y eliminación recursiva.
+ * - Limpieza inteligente y mantenimiento automatizado.
+ * - Cálculo de tamaños, inspección de contenido, verificación de integridad.
+ * 
+ * 100% PHP nativo, sin dependencias externas.
+ */
 class FileHelper
 {
     /* =========================
@@ -172,10 +183,6 @@ class FileHelper
 
     /**
      * Elimina archivos más viejos que X días (no recursivo por defecto).
-     * $options:
-     *   - recursive (bool) por defecto false
-     *   - exclude (array) rutas o patrones fnmatch
-     *   - simulate (bool) no elimina, solo devuelve conteo
      */
     public static function deleteOldFiles(string $path, int $days, array $options = []): int
     {
@@ -188,32 +195,53 @@ class FileHelper
         $limitTs = time() - ($days * 86400);
         $count = 0;
 
-        if ($recursive) {
-            $it = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
-                RecursiveIteratorIterator::LEAVES_ONLY
-            );
-            foreach ($it as $file) {
-                if (!$file->isFile()) continue;
-                $fp = $file->getPathname();
-                if (self::isExcluded($fp, $exclude)) continue;
-                if (filemtime($fp) < $limitTs) {
-                    if (!$simulate) @unlink($fp);
-                    $count++;
-                }
-            }
-        } else {
-            foreach (glob($path . '/*') as $fp) {
-                if (!is_file($fp)) continue;
-                if (self::isExcluded($fp, $exclude)) continue;
-                if (filemtime($fp) < $limitTs) {
-                    if (!$simulate) @unlink($fp);
-                    $count++;
-                }
+        $iterator = $recursive
+            ? new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS))
+            : new \FilesystemIterator($path);
+
+        foreach ($iterator as $file) {
+            if ($file->isDir()) continue;
+            $fp = $file->getPathname();
+            if (self::isExcluded($fp, $exclude)) continue;
+            if (filemtime($fp) < $limitTs) {
+                if (!$simulate) @unlink($fp);
+                $count++;
             }
         }
 
         return $count;
+    }
+
+    /**
+     * Conserva solo los N archivos más recientes según fecha de modificación.
+     */
+    public static function keepRecentFiles(string $path, int $keep = 5, string $pattern = '*'): int
+    {
+        if (!is_dir($path)) return 0;
+        $files = glob($path . '/' . $pattern);
+        if (!$files) return 0;
+
+        usort($files, fn($a, $b) => filemtime($b) <=> filemtime($a));
+        $removed = 0;
+
+        foreach (array_slice($files, $keep) as $file) {
+            @unlink($file);
+            $removed++;
+        }
+
+        return $removed;
+    }
+
+    /**
+     * Empaqueta una carpeta y elimina la original (backup + limpieza).
+     */
+    public static function archiveAndClean(string $source, string $destination): bool
+    {
+        if (!self::zip($source, $destination)) {
+            throw new \Exception("Error al comprimir $source");
+        }
+        self::delete($source);
+        return true;
     }
 
     /* =========================
@@ -246,15 +274,77 @@ class FileHelper
         return $size;
     }
 
+    /** Copia en modo stream (para archivos grandes). */
+    public static function streamCopy(string $source, string $destination, int $buffer = 8192): bool
+    {
+        $in = fopen($source, 'rb');
+        $out = fopen($destination, 'wb');
+        if (!$in || !$out) return false;
+
+        while (!feof($in)) {
+            fwrite($out, fread($in, $buffer));
+        }
+
+        fclose($in);
+        fclose($out);
+        return true;
+    }
+
+    /** Verifica integridad de archivo por hash. */
+    public static function verifyHash(string $file, string $expectedHash, string $algo = 'sha256'): bool
+    {
+        if (!file_exists($file)) return false;
+        return hash_file($algo, $file) === $expectedHash;
+    }
+
+    /** Sincroniza dos carpetas (mirror). */
+    public static function mirror(string $source, string $destination, array $exclude = []): void
+    {
+        self::copy($source, $destination, $exclude);
+
+        foreach (glob($destination . '/*') as $file) {
+            $relative = basename($file);
+            if (!file_exists($source . '/' . $relative)) {
+                self::delete($file);
+            }
+        }
+    }
+
+    /** Devuelve un resumen de los archivos dentro de una carpeta. */
+    public static function inspect(string $path, bool $recursive = false): array
+    {
+        if (!is_dir($path)) return [];
+        $files = [];
+
+        $iterator = $recursive
+            ? new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS))
+            : new \DirectoryIterator($path);
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                $files[] = [
+                    'name' => $file->getFilename(),
+                    'path' => $file->getPathname(),
+                    'size' => self::humanSize($file->getSize()),
+                    'modified' => date('Y-m-d H:i:s', $file->getMTime()),
+                ];
+            }
+        }
+
+        return $files;
+    }
+
+    /* =========================
+     *  INTERNAS
+     * ========================= */
+
     /** Determina si una ruta debe excluirse por coincidencia exacta o patrón fnmatch. */
     private static function isExcluded(string $path, array $exclude): bool
     {
         foreach ($exclude as $rule) {
-            // coincidencia por patrón (supports *, ?, [])
             if (fnmatch($rule, basename($path)) || fnmatch($rule, $path)) {
                 return true;
             }
-            // coincidencia exacta
             if (realpath($path) === realpath($rule)) {
                 return true;
             }

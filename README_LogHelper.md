@@ -278,29 +278,4 @@ LogHelper::success('Sincronización completada correctamente');
 
 En caso de error, también puedes usar Webhooks para enviar alertas automáticas.
 
----
-
-## Buenas prácticas
-
-1. Usa niveles adecuados según la severidad del evento.
-2. No registres información sensible (contraseñas, tokens, datos personales).
-3. Define una ruta de logs fuera del directorio público (`/public`).
-4. Activa el modo JSON si planeas enviar logs a herramientas externas (Grafana, ELK, etc.).
-5. Utiliza `captureErrors()` para mantener registro completo de errores del entorno.
-6. Aprovecha `bufferMode()` en procesos largos o intensivos para optimizar escritura.
-
----
-
-## Licencia
-
-Distribuido bajo la licencia **MIT**.  
-Puedes usarlo, modificarlo o redistribuirlo libremente con atribución correspondiente.
-
----
-
-## Autor
-
-**Samuel Huicab Pastrana**  
-Email: [samueleliashuicab@gmail.com](mailto:samueleliashuicab@gmail.com)  
-GitHub: [https://github.com/samuelhuicab](https://github.com/samuelhuicab)
 

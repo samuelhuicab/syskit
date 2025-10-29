@@ -55,7 +55,7 @@ class SysKit
     }
 
     /* =====================================================
-     *  LOGS AVANZADOS
+     *  LOGS
      * ===================================================== */
 
     /**
@@ -66,27 +66,30 @@ class SysKit
      * @param string|null $category Subcarpeta opcional (e.g. "api", "backup")
      * @param array $context Datos adicionales ['user'=>'sam','ip'=>'127.0.0.1']
      */
-    public static function log(string $message, string $level = 'info', ?string $category = null, array $context = []): void
+    /** LOGGING */
+    public static function log(string $message, string $level = 'info', array $context = []): void
     {
-        LogHelper::write($message, $level, $category, $context);
+        LogHelper::write($message, $level, null, $context);
     }
 
-    /** Cambia la ruta base donde se guardan los logs */
-    public static function setLogPath(string $path): void
+    public static function captureErrors(): void
     {
-        LogHelper::setBasePath($path);
+        LogHelper::captureErrors();
     }
 
-    /** Define los días de retención de logs (por defecto: 30) */
-    public static function setLogRetention(int $days): void
+    public static function setJsonLogs(bool $json): void
     {
-        LogHelper::setRetention($days);
+        LogHelper::setJsonFormat($json);
     }
 
-    /** Obtiene logs recientes en array (para paneles o APIs) */
-    public static function getLogs(?string $category = null, int $limit = 100): array
+    public static function setWebhook(string $url): void
     {
-        return LogHelper::getLogs($category, $limit);
+        LogHelper::enableWebhook($url);
+    }
+
+    public static function getLogs(?string $category = null, int $limit = 50): array
+    {
+        return LogHelper::getRecentLogs($category, $limit);
     }
 
     /* =====================================================

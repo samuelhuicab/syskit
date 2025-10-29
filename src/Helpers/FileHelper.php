@@ -6,7 +6,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 
 /**
- * SysKit FileHelper v2.1
+ * SysKit FileHelper
  *
  * Librería utilitaria para la gestión avanzada de archivos y directorios:
  * - Compresión y descompresión ZIP.

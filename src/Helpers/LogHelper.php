@@ -2,7 +2,7 @@
 namespace SysKit\Helpers;
 
 /**
- * SysKit LogHelper v2.1
+ * SysKit LogHelper
  *
  * Implementación de un sistema de logging ligero y extensible sin dependencias externas.
  * Permite registrar eventos con distintos niveles, formateo JSON opcional, rotación automática

@@ -1,6 +1,6 @@
 {
   "name": "samuelhuicab/syskit",
-  "description": "Toolkit PHP profesional para tareas del sistema, automatización, optimización y monitoreo.",
+  "description": "Toolkit PHP para automatizar tareas del sistema: respaldos, limpieza, logs, cron simulado, optimización de imágenes y monitoreo.",
   "type": "library",
   "license": "MIT",
   "autoload": {

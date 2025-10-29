@@ -19,6 +19,6 @@
       "email": "samueleliashuicab@gmail.com"
     }
   ],
-  "keywords": ["php", "automation", "backup", "logs", "cron", "system", "images"],
+  "keywords": ["php", "automation", "backup", "logs", "cron", "system", "images", "psr-3"],
   "homepage": "https://github.com/samuelhuicab/syskit"
 }

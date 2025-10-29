@@ -1,4 +1,4 @@
-# SysKit SystemHelper v2.0
+# SysKit SystemHelper
 
 **SysKit SystemHelper** es un módulo de monitoreo del sistema para PHP que ofrece información de rendimiento, entorno y recursos del servidor.  
 Su objetivo es brindar a los desarrolladores métricas del sistema (CPU, RAM, disco, red, procesos, etc.) sin depender de extensiones externas ni herramientas de terceros.

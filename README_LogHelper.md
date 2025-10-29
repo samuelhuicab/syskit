@@ -20,9 +20,6 @@ Su propósito es ofrecer una herramienta profesional, escalable y fácil de inte
    - [Integración con Laravel](#integración-con-laravel)
    - [Integración en proyectos PHP tradicionales](#integración-en-proyectos-php-tradicionales)
    - [Integración con cron jobs o tareas automáticas](#integración-con-cron-jobs-o-tareas-automáticas)
-10. [Buenas prácticas](#buenas-prácticas)
-11. [Licencia](#licencia)
-12. [Autor](#autor)
 
 ---
 

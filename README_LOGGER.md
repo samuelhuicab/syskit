@@ -1,4 +1,4 @@
-# SysKit LogHelper v2.1
+# SysKit LogHelper
 
 **SysKit LogHelper** es una librería ligera de PHP para gestión avanzada de logs, diseñada para proyectos que necesitan trazabilidad, control de errores y monitoreo sin depender de frameworks pesados.
 

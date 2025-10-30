@@ -2,7 +2,7 @@
 namespace SysKit\Helpers;
 
 /**
- * SysKit SystemHelper v2.0
+ * SysKit SystemHelper
  *
  * Módulo de diagnóstico y monitoreo del sistema.
  * Proporciona información detallada sobre el entorno PHP, CPU, memoria, disco,

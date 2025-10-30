@@ -5,7 +5,7 @@ namespace SysKit\Helpers;
  * SysKit ExcelLiteHelper
  *
  * Generador ultraliviano de archivos XLSX a partir de datos ya obtenidos.
- * No consulta la base de datos directamente, solo convierte arrays en Excel.
+ * 
  * Ideal para millones de filas con encabezado personalizado o autodetectado.
  */
 class ExcelLiteHelper
